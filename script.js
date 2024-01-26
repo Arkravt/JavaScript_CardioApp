@@ -18,6 +18,7 @@ class App {
         this._getPosition();
         form.addEventListener('submit', this._newWorkout.bind(this));
         inputType.addEventListener('change', this._toggleClimbField);
+        containerWorkouts.addEventListener('click', this._moveToWorkoutMarker.bind(this));
     }
 
     _getPosition() {
@@ -156,6 +157,23 @@ class App {
         };
 
         form.insertAdjacentHTML('afterend', HTMLText);
+    }
+
+    _moveToWorkoutMarker(e) {
+        const workoutElement = e.target.closest('.workout');
+
+        if (!workoutElement) return;
+
+        const workout = this.#workouts.find(
+            workout => workout.id === workoutElement.dataset.id);
+
+        this.#map.setView(workout.coords, 13, {
+            animate: true,
+            pan: {
+                duration: 1
+            }
+        });
+
     }
 }
 
